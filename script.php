@@ -41,6 +41,7 @@ $user_choice = $_GET['select'] ?? '';
             <select name="select" class="form-select">
                 <option value="" selected>Filter</option>
                 <option value="parking">Parking</option>
+                <option value="no-parking">Without Parking</option>
             </select>
             <button class="btn btn-success ms-2">Cerca</button>
         </form>
@@ -67,6 +68,8 @@ $user_choice = $_GET['select'] ?? '';
                                 <td><?= $new_value ?></td>
                             <?php elseif ($user_choice === 'parking' && $hotel['parking']) :?>
                                 <td><?= $new_value ?></td>
+                            <?php elseif ($user_choice === 'no-parking' && !($hotel['parking'])) :?>
+                            <td><?= $new_value ?></td>
                             <?php endif ?>
                         <?php endforeach ?>
                     </tr>
