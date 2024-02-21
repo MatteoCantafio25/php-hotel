@@ -15,9 +15,19 @@ foreach ($hotels as $hotel) {
 };
 
 
-// Raccolgo la scelta dell'utente dal form
 
-$user_choice = $_GET['select'] ?? '';
+// Controllo se arriva il filtro parcheggio e agisco di conseguenza
+
+if(isset($_GET['parking'])){
+    $filtered_hotels = [];
+    $checked = 'checked';
+
+    foreach ($hotels as $hotel){
+        if($hotel['parking']) $filtered_hotels[] = $hotel;
+    }
+
+    $hotels = $filtered_hotels;
+}
 
 ?>
 
@@ -31,18 +41,18 @@ $user_choice = $_GET['select'] ?? '';
     <meta name="description" content="PHP Hotel">
     <title>PHP Hotel</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css' integrity='sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==' crossorigin='anonymous'/>
-    <link rel='stylesheet' href='style.css'>
 </head>
 <body>
     
     <div class="container">
         <!-- Form -->
-        <form action="" method="GET">
-            <select name="select" class="form-select">
-                <option value="" selected>Filter</option>
-                <option value="parking">Parking</option>
-                <option value="no-parking">Without Parking</option>
-            </select>
+        <form action="" method="GET" class="d-flex align-items-center mt-4">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="parking" name="parking" <?= $checked ?? '' ?>>
+                <label class="form-check-label" for="parking">
+                    Show only hotels with parking
+                </label>
+            </div>
             <button class="btn btn-success ms-2">Cerca</button>
         </form>
         
@@ -61,17 +71,11 @@ $user_choice = $_GET['select'] ?? '';
             <tbody>
                 <?php foreach($hotels as $hotel) :?>
                     <tr>
-                        <?php foreach ($hotel as $value) :
-                            $new_value = is_bool($value) ? ($value ? '&#10003' : '&#10007;') : $value;
-                            ?>
-                            <?php if ($user_choice === ''): ?>
-                                <td><?= $new_value ?></td>
-                            <?php elseif ($user_choice === 'parking' && $hotel['parking']) :?>
-                                <td><?= $new_value ?></td>
-                            <?php elseif ($user_choice === 'no-parking' && !($hotel['parking'])) :?>
-                            <td><?= $new_value ?></td>
-                            <?php endif ?>
-                        <?php endforeach ?>
+                        <th scope="col"><?= $hotel['name'] ?></th>
+                        <td><?= $hotel['description'] ?></td> 
+                        <td><?= $hotel['parking'] ? '&#10003': '&#10007' ?></td>
+                        <td><?= $hotel['vote'] ?></td>
+                        <td><?= $hotel['distance_to_center'] ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>

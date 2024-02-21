@@ -1,9 +1,0 @@
-form {
-    display: flex;
-    margin-top: 200px;
-    height: 40px;
-}
-
-select {
-    max-width: 300px;
-}
